@@ -24,7 +24,6 @@ class FlaskRouteTests(unittest.TestCase):
 
     def test_invalid_input_handling(self):
         '''Test handling of invalid input on the random recipes route.'''
-        
         # Test case for non-numeric input
         response = self.client.get('/random/abc', follow_redirects=True)
         self.assertIn(b"Sorry, wrong format. Do this instead:", response.data)
