@@ -14,17 +14,16 @@ class FlaskRouteTests(unittest.TestCase):
         '''Verify the content of the homepage route.'''
         response = self.client.get('/')
         expected_content = (
-            "In the url after the /, enter the word random, then a /, "
-            "followed by a number between 1 and 10. "
-            "This will return that many random recipes from the dataset. "
-            "For example: /random/3 will return 3 random recipes."
+            b"In the url after the /, enter the word random, then a /, "
+            b"followed by a number between 1 and 10. "
+            b"This will return that many random recipes from the dataset. "
+            b"For example: /random/3 will return 3 random recipes."
         )
         self.assertIn(expected_content, response.data, "Homepage content " \
         "should match the expected text.")
 
     def test_invalid_input_handling(self):
         '''Test handling of invalid input on the random recipes route.'''
-        
         # Test case for non-numeric input
         response = self.client.get('/random/abc', follow_redirects=True)
         self.assertIn(b"Sorry, wrong format. Do this instead:", response.data)

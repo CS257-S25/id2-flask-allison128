@@ -45,9 +45,9 @@ def random_recipes(num_recipes):
     return f"Returning {num_recipes} random recipes...<br><br>{output}"
 
 @app.errorhandler(404)
-def page_not_found():
+def page_not_found(e):
     '''Handles 404 errors by returning a custom error message.''' 
-    return "Sorry, wrong format. Please use the correct URL format: /random/number_of_recipes"
+    return "Sorry, wrong format. Do this instead: /random/number_of_recipes"
 
 @app.errorhandler(500)
 def python_bug(e):
