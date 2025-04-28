@@ -52,7 +52,7 @@ def page_not_found(e):
 @app.errorhandler(500)
 def python_bug(e):
     '''Handles internal server errors (HTTP 500) by returning a formatted error message.'''
-    return f"A bug occurred! {str(e)}"
+    return f"A bug occurred! {str(e)}", 500
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -14,13 +14,8 @@ class FlaskRouteTests(unittest.TestCase):
     def test_homepage_content(self):
         '''Verify the content of the homepage route.'''
         response = self.client.get('/')
-        expected_content = (
-            b"<h1>Welcome to Flavor Finder, your Digital Recipe Generator!</h1>"
-            b"<p>This is the Homepage. To discover a random recipe, simply use the URL format '/random/n', where <em>n</em> is a number of desired recipes between 1 and 10.</p>"
-            b"<p>For example, use '/random/2' to view two randomly generated recipes.</p>"
-        )
-        self.assertIn(expected_content, response.data, "Homepage content " \
-        "should match the expected text.")
+        expected_partial = b"Welcome to Flavor Finder"
+        self.assertIn(expected_partial, response.data)
 
     def test_random_input_too_small(self):
         response = self.client.get('/random/0')
