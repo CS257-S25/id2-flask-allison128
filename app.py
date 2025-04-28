@@ -1,67 +1,57 @@
-import csv
-import os
 from flask import Flask
-import unittest
-
+from ProductionCode.random_recipe import get_random_recipes
 
 app = Flask(__name__)
-data = []
 
-
-def load_data():
-   # Path to the CSV file
-   file_path = 'final_data.csv'
-  
-   if not os.path.exists(file_path):
-       # File not found, using dummy data
-       print(f"Warning: The file '{file_path}' was not found. Using hardcoded data instead.")
-       data.append(["Recipe Title", "Instructions", "Cleaned Ingredients"])
-       data.append(["Miso-Butter Roast Chicken", "Instructions", "Ingredients List"])
-   else:
-       # Read from the CSV file if it exists
-       with open(file_path, newline='') as f:
-           reader = csv.reader(f)
-           next(reader) 
-           for row in reader:
-               data.append(row)
-
+def load_recipe_data():
+    """
+    This function imports the `get_data` function from the `ProductionCode.data` module
+    to retrieve the recipe data. The import is performed inside the function to avoid
+    potential circular import issues. The function also skips the header of the data
+    before returning it.
+    """
+    # Import the module, not the function, inside the function to avoid circular import
+    import ProductionCode.data as data_module
+    recipe_data = data_module.get_data()
+    print("Loaded Recipe Data:", recipe_data)  # For debugging
+    return recipe_data
 
 @app.route('/')
 def homepage():
-   return """
-   <h1> Hello, Welcome to Flavor Finder, your Digital Recipe Generator!</h1>
-   <p>This is the homepage. Use '/recipe/recipe_id' to view a recipe.</p>
-   <p>For now, use '/recipe/1' to view recipe 1.</p>
-   """
+    """
+    This function returns the homepage of the application. 
+    It provides an introduction to Flavor Finder and  instructions on how to use the 
+    app to discover random recipes by specifying a number in the URL.
+    """
+    return"""
+   <h1>Welcome to Flavor Finder, your Digital Recipe Generator!</h1>
+   Welcome to the homepage! To discover a random recipe, simply use the URL format '/random/n', where <em>n</em> is a number of desired recipes between 1 and 10.
+   <p>For example, use '/random/2' to view two randomly generated recipes.</p>
+"""
 
-
-@app.route('/recipe/<int:recipe_id>', methods=['GET'])
-def get_recipe(recipe_id):
-   try:
-       # Adjust for zero-based indexing (recipe_id 1 should be index 0, etc.)
-       recipe = data[recipe_id - 1]  # Subtract 1 to match recipe_id with list index
-       return f"<h1>{recipe[0]}</h1><p><strong>Title:</strong><br>{recipe[1]}</p><p>\
-        <strong>Instructions:</strong><br>{recipe[2]}</p><strong>Ingredients:</strong><br>{recipe[3]}</p>"
-   except IndexError:
-       return "Invalid recipe ID."
-
+@app.route('/random/<int:num_recipes>')
+def random_recipes(num_recipes):
+    '''Function returns random recipes from recipe_data.csv'''
+    if num_recipes < 1 or num_recipes > 10:
+        return "Please enter a number between 1 and 10."
+    recipe_data = load_recipe_data()
+    randrecipes = get_random_recipes(recipe_data, num_recipes)
+    if not randrecipes:
+        return "No recipes found."
+    output = ""
+    for recipe in randrecipes:
+        output += f"<b>{recipe[1]}</b>: {recipe[2]}<br><br>"
+    return f"Returning {num_recipes} random recipes...<br><br>{output}"
 
 @app.errorhandler(404)
 def page_not_found(e):
-   return "Sorry, wrong format, do this instead...."
-
+    '''Handles 404 errors by returning a custom error message.''' 
+    return ("Sorry, wrong format. Please use the correct URL format: /random/number_of_recipes")
 
 @app.errorhandler(500)
 def python_bug(e):
-   return "Eek, a bug!"
-
-
-# Load data on startup
-load_data()
-
+    '''Handles internal server errors (HTTP 500) by returning a formatted error message.'''
+    return f"A bug occurred! {str(e)}"
 
 if __name__ == '__main__':
-   app.run(debug=True)
-
-
-
+    app.run(debug=True)

@@ -9,3 +9,4 @@ def get_random_recipes(recipes, num_recipes):
     """
 
     return random.sample(recipes, num_recipes)
+
