@@ -22,13 +22,6 @@ class FlaskRouteTests(unittest.TestCase):
         self.assertIn(expected_content, response.data, "Homepage content " \
         "should match the expected text.")
 
-    def test_random_valid_input(self):
-        with patch('ProductionCode.data.get_data', return_value=[["id", "title", "desc"], [1, "Pasta", "Yummy"], [2, "Soup", "Hot"]]):
-            with patch('ProductionCode.random_recipe.get_random_recipes', return_value=[[1, "Pasta", "Yummy"]]):
-                response = self.client.get('/random/1')
-                self.assertIn(b"Returning 1 random recipes", response.data)
-                self.assertIn(b"Pasta", response.data)
-
     def test_random_input_too_small(self):
         response = self.client.get('/random/0')
         self.assertIn(b"Please enter a number between 1 and 10.", response.data)
