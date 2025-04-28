@@ -1,5 +1,8 @@
+'''Flask web application, digital recipe generator'''
+
 from flask import Flask
 from ProductionCode.random_recipe import get_random_recipes
+import ProductionCode.data as data_module
 
 app = Flask(__name__)
 
@@ -10,8 +13,6 @@ def load_recipe_data():
     potential circular import issues. The function also skips the header of the data
     before returning it.
     """
-    # Import the module, not the function, inside the function to avoid circular import
-    import ProductionCode.data as data_module
     recipe_data = data_module.get_data()
     print("Loaded Recipe Data:", recipe_data)  # For debugging
     return recipe_data
@@ -44,9 +45,9 @@ def random_recipes(num_recipes):
     return f"Returning {num_recipes} random recipes...<br><br>{output}"
 
 @app.errorhandler(404)
-def page_not_found(e):
+def page_not_found():
     '''Handles 404 errors by returning a custom error message.''' 
-    return ("Sorry, wrong format. Please use the correct URL format: /random/number_of_recipes")
+    return "Sorry, wrong format. Please use the correct URL format: /random/number_of_recipes"
 
 @app.errorhandler(500)
 def python_bug(e):
