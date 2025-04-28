@@ -14,10 +14,9 @@ class FlaskRouteTests(unittest.TestCase):
         '''Verify the content of the homepage route.'''
         response = self.client.get('/')
         expected_content = (
-            b"In the url after the /, enter the word random, then a /, "
-            b"followed by a number between 1 and 10. "
-            b"This will return that many random recipes from the dataset. "
-            b"For example: /random/3 will return 3 random recipes."
+            b"Welcome to Flavor Finder, your Digital Recipe Generator!"
+            b"This is the Homepage. To discover a random recipe, simply use the URL format '/random/n', where <em>n</em> is a number of desired recipes between 1 and 10."
+            b"Foror example, use '/random/2' to view two randomly generated recipes."
         )
         self.assertIn(expected_content, response.data, "Homepage content " \
         "should match the expected text.")

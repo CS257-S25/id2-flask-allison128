@@ -26,7 +26,7 @@ def homepage():
     """
     return"""
    <h1>Welcome to Flavor Finder, your Digital Recipe Generator!</h1>
-   Welcome to the homepage! To discover a random recipe, simply use the URL format '/random/n', where <em>n</em> is a number of desired recipes between 1 and 10.
+   <p>This is the Homepage. To discover a random recipe, simply use the URL format '/random/n', where <em>n</em> is a number of desired recipes between 1 and 10.</p>
    <p>For example, use '/random/2' to view two randomly generated recipes.</p>
 """
 
