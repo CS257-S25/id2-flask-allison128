@@ -36,4 +36,4 @@ class FlaskRouteTests(unittest.TestCase):
         '''Verify behavior when a 500 error occurs.'''
         with patch('ProductionCode.data.get_data', side_effect=Exception("Simulated error")):
             response = self.client.get('/random/1')
-            self.assertIn(b"A bug occurred! Simulated error", response.data)
+            self.assertIn(b"A bug occurred! Simulated error.", response.data)
