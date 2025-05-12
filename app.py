@@ -17,22 +17,20 @@ def load_recipe_data():
     print("Loaded Recipe Data:", recipe_data)  # For debugging
     return recipe_data
 
+''' This function returns the homepage of the application. 
+    It provides an introduction to Flavor Finder and  instructions on how to use the 
+    app to discover random recipes by specifying a number in the URL.'''
 @app.route('/')
 def homepage():
-    """
-    This function returns the homepage of the application. 
-    It provides an introduction to Flavor Finder and  instructions on how to use the 
-    app to discover random recipes by specifying a number in the URL.
-    """
     return"""
    <h1>Welcome to Flavor Finder, your Digital Recipe Generator!</h1>
    <p>This is the Homepage. To discover a random recipe, simply use the URL format '/random/n', where <em>n</em> is a number of desired recipes between 1 and 10.</p>
    <p>For example, use '/random/2' to view two randomly generated recipes.</p>
 """
 
+'''Function returns random recipes from recipe_data.csv'''
 @app.route('/random/<int:num_recipes>')
 def random_recipes(num_recipes):
-    '''Function returns random recipes from recipe_data.csv'''
     if num_recipes < 1 or num_recipes > 10:
         return "Please enter a number between 1 and 10."
     recipe_data = load_recipe_data()
