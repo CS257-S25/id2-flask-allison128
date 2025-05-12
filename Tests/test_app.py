@@ -37,3 +37,45 @@ class FlaskRouteTests(unittest.TestCase):
         with patch('ProductionCode.data.get_data', side_effect=Exception("Simulated error")):
             response = self.client.get('/random/1')
             self.assertIn(b"A bug occurred! Simulated error.", response.data)
+
+    def test_load_recipe_data_function(self, mock_get_data):
+        '''Verify that load_recipe_data returns the expected data from get_data.'''
+        mock_get_data.return_value = [
+            ["id", "name", "description"], 
+            [1, "Spaghetti", "Tasty Italian pasta"],
+            [2, "Sushi", "Fresh seafood rolls"]
+        ]
+        from data.recipe_data_1 import recipe_data
+        result = recipe_data()
+        self.assertEqual(result, mock_get_data.return_value)
+        mock_get_data.assert_called_once()
+    
+    def test_random_recipes_function(self):
+        '''Verify that random_recipes returns the expected output.'''
+        with patch('ProductionCode.random_recipe.get_random_recipes') as mock_get_random_recipes:
+            mock_get_random_recipes.return_value = [
+                [1, "Spaghetti", "Tasty Italian pasta"],
+                [2, "Sushi", "Fresh seafood rolls"]
+            ]
+            response = self.client.get('/random/2')
+            self.assertIn(b"Returning 2 random recipes...", response.data)
+            self.assertIn(b"Spaghetti: Tasty Italian pasta", response.data)
+            self.assertIn(b"Sushi: Fresh seafood rolls", response.data)
+        
+        
+    def test_random_recipes_none_found(self, mock_load_data, mock_get_random):
+        '''Verify behavior when no recipes are returned.'''
+        mock_load_data.return_value = []
+        mock_get_random.return_value = []
+        response = self.client.get('/random/1')
+        self.assertIn(b"No recipes found.", response.data)
+
+    def test_404_error(self):
+        '''Verify behavior when a 404 error occurs.'''
+        response = self.client.get('/nonexistent_route')
+        self.assertIn(b"Sorry, wrong format. Do this instead:", response.data)
+
+if __name__ == '__main__':
+    unittest.main()
+    app.run(debug=True)
+# This test suite uses the unittest framework to test the Flask application routes.
