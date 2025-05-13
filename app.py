@@ -42,12 +42,10 @@ def random_recipes(num_recipes):
     randrecipes = get_random_recipes(recipe_data, num_recipes)
     if not randrecipes:
         return "No recipes found."
-
     output = ""
     for recipe in randrecipes:
         output += f"<b>{recipe[1]}</b>: {recipe[2]}<br><br>"
     return f"Returning {num_recipes} random recipes...<br><br>{output}"
-
 
 @app.errorhandler(404)
 def page_not_found():
