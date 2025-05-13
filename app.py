@@ -27,17 +27,11 @@ def homepage():
    <p>For example, use '/random/2' to view two randomly generated recipes.</p>
 """
 
-@app.route('/random/<num_recipes>')
+@app.route('/random/<int:num_recipes>')
 def random_recipes(num_recipes):
     '''Function returns random recipes from recipe_data.csv'''
-    try:
-        num_recipes = int(num_recipes)
-    except ValueError:
-        return "Sorry, wrong format. Do this instead: /random/3", 400
-
     if num_recipes < 1 or num_recipes > 10:
-        return "Please enter a number between 1 and 10.", 400
-
+        return "Please enter a number between 1 and 10."
     recipe_data = load_recipe_data()
     randrecipes = get_random_recipes(recipe_data, num_recipes)
     if not randrecipes:
@@ -55,7 +49,8 @@ def page_not_found():
 @app.errorhandler(500)
 def python_bug(e):
     '''Handles internal server errors (HTTP 500) by returning a formatted error message.'''
-    return f"A bug occurred! Simulated error. {str(e)}", 500
+    return f"A bug occurred! {str(e)}", 500
 
 if __name__ == '__main__':
     app.run(debug=True)
+    
