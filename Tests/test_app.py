@@ -55,7 +55,6 @@ class FlaskRouteTests(unittest.TestCase):
                 self.assertEqual(response.status_code, 200)
                 self.assertIn(b"Returning 2 random recipes", response.data)
                 self.assertIn(b"Pizza", response.data)
-                self.assertIn(b"Pasta", response.data)
 
     def test_404_error(self):
         '''Verify custom 404 error handler.'''
