@@ -49,7 +49,8 @@ class FlaskRouteTests(unittest.TestCase):
             ['3', 'Salad', 'Fresh and crispy'],
         ]
         with patch('ProductionCode.data.get_data', return_value=fake_data):
-            with patch('ProductionCode.random_recipe.get_random_recipes', return_value=fake_data[1:3]):
+            with patch('ProductionCode.random_recipe.get_random_recipes',
+                       return_value=fake_data[1:3]):
                 response = self.client.get('/random/2')
                 self.assertEqual(response.status_code, 200)
                 self.assertIn(b"Returning 2 random recipes", response.data)
